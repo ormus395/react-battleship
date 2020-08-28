@@ -2,7 +2,7 @@
 
 ### this is a battleship game built using modern React;
 
-This project was created for the Headbutt Keyboards blog found at [jarecturner.tech](jarecturner.tech)
+This project was created for the Headbutt Keyboards blog found at [jarecturner.tech](https://www.jarecturner.tech/)
 
 The premise is to create a battleship game to teach people React.
 Its goint to start small, simple logic ect, then be built upon.
