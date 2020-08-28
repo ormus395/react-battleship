@@ -2,14 +2,17 @@ import React from "react";
 
 import Sea from "./Sea";
 
+/*
+  Need to create 8 ships, but the type need to be randomized
+  Sea componenet should be in charge of ship generation
+
+*/
+
 // constant variables to control game logic
 const SHIP_COUNT = 8;
 const ROWS = 10;
 const COLS = 10;
 const MISSED_COUNT = 12;
-const LITTLE_SHIP = 2;
-const MIDDLE_SHIP = 3;
-const LARGE_SHIP = 4;
 
 // action constants, cuz fuck having to type them out
 const DESTROYED_SHIP = "destroyed_ship";
@@ -64,7 +67,7 @@ function Game() {
   return (
     <>
       <h3>I am GAME</h3>
-      <Sea rows={ROWS} cols={COLS} />
+      <Sea rows={ROWS} cols={COLS} shipCount={SHIP_COUNT} />
     </>
   );
 }

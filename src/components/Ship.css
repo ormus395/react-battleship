@@ -1,0 +1,21 @@
+h4 {
+  margin: 0;
+}
+
+.point--hidden {
+  display: none;
+}
+
+.point--hit {
+  background-color: orange;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.point--miss {
+  background-color: gray;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
