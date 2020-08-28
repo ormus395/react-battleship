@@ -1,0 +1,21 @@
+.board {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.point {
+  background-color: aqua;
+  border: 2px dashed silver;
+  width: 70px;
+  height: 70px;
+}
+
+.point:hover {
+  background-color: seagreen;
+  cursor: pointer;
+}
