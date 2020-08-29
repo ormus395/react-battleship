@@ -2,7 +2,8 @@
 
 - [x] Need to add the logic to fill sea with ships, but remain hidden.
 
-  - [] Need to programatically place the ships based on count and verticality
+  - [x] Need to programatically place the ships based on count and verticality
+  - [] Should work on refacting, its very ugly haha
 
 - [] Need to be able to click point in grid, then run detect logic
 
