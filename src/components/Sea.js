@@ -42,7 +42,11 @@ function Sea({ rows, cols, shipCount }) {
         // generate the ship and place it
         // increment shipsPlaced
 
-        let ship = <Ship id={id} shipSize={size} wasClicked={false} />;
+        let ship = {
+          id: id,
+          shipSize: size,
+          hitCount: size,
+        }; //<Ship id={id} shipSize={size} wasClicked={false} />;
 
         if (isVert) {
           for (let i = 0; i < size; i++) {
@@ -94,24 +98,59 @@ function Sea({ rows, cols, shipCount }) {
     console.log("Placed the ships");
   }
 
+  const handleUserClick = (rowId, colId) => {
+    let point = sea[rowId][colId];
+    let updatedSea = [...sea];
+    // need to check if internal board state containes a ship
+    console.log(sea[rowId][colId]);
+    if (point !== null && point !== "hit" && point !== "miss") {
+      let ship = sea[rowId][colId];
+      ship.hitCount = ship.hitCount - 1;
+
+      updatedSea[rowId][colId] = "hit";
+
+      // now that we are checking if its a ship being hit, determine wether or not the ship was destroyed
+      // all ship objects have a hit count and a size, if they equal, the ship was destroyed
+      // call the Game componenets ship destroyed method to updated the Game state
+      // also updated the sea with the new board state.
+      setSea(updatedSea);
+    } else if (point === "hit" || point === "miss") {
+      // alert the user that they have alreay clicked here. Helps user experience and makes sure nothing
+      // happens when the user clicks a point they already have
+      alert("You have already clicked this point.");
+    } else {
+      // this should be a miss, call Game components miss count
+      updatedSea[rowId][colId] = "miss";
+      setSea(updatedSea);
+    }
+  };
+
   // console.log(sea);
 
   // create ui interpretation;
   let gameBoard;
 
   if (sea) {
-    gameBoard = sea.map((row) => {
+    gameBoard = sea.map((row, index) => {
       return (
-        <div className="row">
-          {row.map((col) => {
-            let pointStyle = "point";
+        <div key={index} className="row" id={index}>
+          {row.map((col, colIndex) => {
+            console.log(col);
+            let pointStyle;
+            if (col === "miss") {
+              pointStyle = "point point--miss";
+            } else if (col === "hit") {
+              pointStyle = "point point--hit";
+            } else {
+              pointStyle = "point";
+            }
             return (
               <div
-                key={col ? col.id : randomGenerator(10000)}
+                key={colIndex}
                 className={pointStyle}
-              >
-                {col}
-              </div>
+                id={colIndex}
+                onClick={() => handleUserClick(index, colIndex)}
+              ></div>
             );
           })}
         </div>

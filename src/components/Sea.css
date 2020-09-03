@@ -11,11 +11,27 @@
 .point {
   background-color: #006699;
   border: 2px dashed silver;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
 }
 
 .point:hover {
   background-color: seagreen;
   cursor: pointer;
+}
+
+.point--miss {
+  background-color: grey;
+}
+
+.point--hit {
+  background-color: orangered;
+}
+
+.point--hit:hover {
+  background-color: orangered;
+}
+
+.point--miss:hover {
+  background-color: gray;
 }
