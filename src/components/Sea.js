@@ -1,6 +1,7 @@
 import React from "react";
 import "./Sea.css";
 
+import { DESTROYED_SHIP, MISSED } from "../actions";
 import { generateShipSize, randomGenerator, willItFit } from "../util";
 
 import Ship from "./Ship";
@@ -14,14 +15,13 @@ import Ship from "./Ship";
 */
 
 // will take rows and cols and ship count
-function Sea({ rows, cols, shipCount }) {
+function Sea({ handleMiss, handleDestroyed, rows, cols, shipCount }) {
   // need to create an internal data board/ grid that is the sea
   // but also need to create a UI version of this too
   let [sea, setSea] = React.useState(null);
   let [shipsPlaced, setShipsPlaced] = React.useState(false);
 
   const placeShips = (sea) => {
-    console.log(sea);
     let count = 0;
     let newSea = [...sea];
 
@@ -102,7 +102,6 @@ function Sea({ rows, cols, shipCount }) {
     let point = sea[rowId][colId];
     let updatedSea = [...sea];
     // need to check if internal board state containes a ship
-    console.log(sea[rowId][colId]);
     if (point !== null && point !== "hit" && point !== "miss") {
       let ship = sea[rowId][colId];
       ship.hitCount = ship.hitCount - 1;
@@ -113,6 +112,10 @@ function Sea({ rows, cols, shipCount }) {
       // all ship objects have a hit count and a size, if they equal, the ship was destroyed
       // call the Game componenets ship destroyed method to updated the Game state
       // also updated the sea with the new board state.
+
+      if (ship.hitCount === 0) {
+        handleDestroyed({ type: DESTROYED_SHIP });
+      }
       setSea(updatedSea);
     } else if (point === "hit" || point === "miss") {
       // alert the user that they have alreay clicked here. Helps user experience and makes sure nothing
@@ -122,6 +125,7 @@ function Sea({ rows, cols, shipCount }) {
       // this should be a miss, call Game components miss count
       updatedSea[rowId][colId] = "miss";
       setSea(updatedSea);
+      handleMiss({ type: MISSED });
     }
   };
 
@@ -135,7 +139,6 @@ function Sea({ rows, cols, shipCount }) {
       return (
         <div key={index} className="row" id={index}>
           {row.map((col, colIndex) => {
-            console.log(col);
             let pointStyle;
             if (col === "miss") {
               pointStyle = "point point--miss";
@@ -158,13 +161,9 @@ function Sea({ rows, cols, shipCount }) {
     });
   }
 
-  // console.log(gameBoard);
+  console.log("updated sea");
   return (
     <div className="sea">
-      <h3>I AM SEA</h3>
-      <p>
-        Rows: {rows}, Cols: {cols}
-      </p>
       <div className="board">{gameBoard}</div>
     </div>
   );

@@ -1,7 +1,8 @@
 import React from "react";
 
+import { DESTROYED_SHIP, MISSED, LOST, WON } from "../actions";
 import Sea from "./Sea";
-
+import Message from "./Message";
 /*
   Need to create 8 ships, but the type need to be randomized
   Sea componenet should be in charge of ship generation
@@ -13,12 +14,6 @@ const SHIP_COUNT = 8;
 const ROWS = 10;
 const COLS = 10;
 const MISSED_COUNT = 12;
-
-// action constants, cuz fuck having to type them out
-const DESTROYED_SHIP = "destroyed_ship";
-const MISSED = "missed";
-const LOST = "lost";
-const WON = "won";
 
 // initial game state
 const initailState = {
@@ -36,25 +31,34 @@ const initailState = {
 // reducer takes state, and action
 // the action types will be
 // destroyed ship, missed, lost, and won
-function reducer(state, action) {
-  switch (action.type) {
-    case DESTROYED_SHIP:
-      return { shipCount: state.shipCount + 1, ...state };
-    case MISSED:
-      return { missCount: state.missCount + 1, ...state };
-    case LOST:
-      return { isLose: true, ...state };
-    case WON:
-      return { isWin: true, ...state };
-    default:
-      throw new Error("reducer broke");
-  }
-}
 
 function Game() {
   // set initial state
-  let [gameState, dispatch] = React.useReducer(reducer, initailState);
+  let [gameState, setGameState] = React.useState(initailState);
 
+  function reducer(action) {
+    console.log("Reducer called");
+    console.log(action);
+    switch (action.type) {
+      case DESTROYED_SHIP:
+        return setGameState({
+          ...gameState,
+          shipCount: gameState.shipCount - 1,
+        });
+      case MISSED:
+        let newState = {
+          ...gameState,
+          missCount: gameState.missCount + 1,
+        };
+        return setGameState(newState);
+      case LOST:
+        return setGameState({ ...gameState, isLose: true });
+      case WON:
+        return setGameState({ ...gameState, isWin: true });
+      default:
+        throw new Error("reducer broke");
+    }
+  }
   // initial game, need to call dispatch to update the sea
 
   // game logic keeps track of misscount and shipcount
@@ -64,10 +68,25 @@ function Game() {
   // if ship is destroyed, call dispatch to decrement ship count
   // update sea, and continue
 
+  const handleMiss = (missed) => reducer(missed);
+  const handleDestroyed = (destroyed) => reducer(destroyed);
+
   return (
     <>
-      <h3>I am GAME</h3>
-      <Sea rows={ROWS} cols={COLS} shipCount={SHIP_COUNT} />
+      <div>
+        <h3>
+          Missed Shot Count: {gameState.missCount}, Ship Count:{" "}
+          {gameState.shipCount}
+        </h3>
+      </div>
+      <Sea
+        handleMiss={handleMiss}
+        handleDestroyed={handleDestroyed}
+        rows={ROWS}
+        cols={COLS}
+        shipCount={SHIP_COUNT}
+      />
+      <Message />
     </>
   );
 }
