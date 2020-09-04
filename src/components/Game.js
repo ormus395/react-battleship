@@ -13,7 +13,7 @@ import Message from "./Message";
 const SHIP_COUNT = 8;
 const ROWS = 10;
 const COLS = 10;
-const MISSED_COUNT = 12;
+const MISSED_COUNT = 20;
 
 // initial game state
 const initailState = {
@@ -35,30 +35,55 @@ const initailState = {
 function Game() {
   // set initial state
   let [gameState, setGameState] = React.useState(initailState);
+  let [message, setMessage] = React.useState(
+    "Welcome! Try sinking the computers ships! Click a grid to start."
+  );
+  let [messageChanged, setMessageChanged] = React.useState(false);
 
   function reducer(action) {
     console.log("Reducer called");
     console.log(action);
     switch (action.type) {
       case DESTROYED_SHIP:
+        setMessage("A ship was destroyed!");
+        setMessageChanged(true);
         return setGameState({
           ...gameState,
           shipCount: gameState.shipCount - 1,
         });
       case MISSED:
+        setMessage("You missed!");
+        setMessageChanged(true);
         let newState = {
           ...gameState,
           missCount: gameState.missCount + 1,
         };
         return setGameState(newState);
       case LOST:
-        return setGameState({ ...gameState, isLose: true });
+        setMessage("You lost...");
+        setMessageChanged(true);
+        return setGameState({
+          ...gameState,
+          isLose: true,
+        });
       case WON:
+        setMessage("You Won!");
+        setMessageChanged(true);
         return setGameState({ ...gameState, isWin: true });
       default:
         throw new Error("reducer broke");
     }
   }
+
+  React.useEffect(() => {
+    console.log("Use effect called");
+    if (messageChanged) {
+      setTimeout(() => {
+        setMessage("");
+        setMessageChanged(false);
+      }, 1500);
+    }
+  }, [messageChanged]);
   // initial game, need to call dispatch to update the sea
 
   // game logic keeps track of misscount and shipcount
@@ -82,11 +107,15 @@ function Game() {
       <Sea
         handleMiss={handleMiss}
         handleDestroyed={handleDestroyed}
+        updateMessage={{
+          setMessage: setMessage,
+          setMessageChanged: setMessageChanged,
+        }}
         rows={ROWS}
         cols={COLS}
         shipCount={SHIP_COUNT}
       />
-      <Message />
+      <Message message={message} />
     </>
   );
 }

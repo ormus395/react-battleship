@@ -15,7 +15,14 @@ import Ship from "./Ship";
 */
 
 // will take rows and cols and ship count
-function Sea({ handleMiss, handleDestroyed, rows, cols, shipCount }) {
+function Sea({
+  handleMiss,
+  handleDestroyed,
+  updateMessage,
+  rows,
+  cols,
+  shipCount,
+}) {
   // need to create an internal data board/ grid that is the sea
   // but also need to create a UI version of this too
   let [sea, setSea] = React.useState(null);
@@ -117,6 +124,8 @@ function Sea({ handleMiss, handleDestroyed, rows, cols, shipCount }) {
         handleDestroyed({ type: DESTROYED_SHIP });
       }
       setSea(updatedSea);
+      updateMessage.setMessage("You hit a ship!");
+      updateMessage.setMessageChanged(true);
     } else if (point === "hit" || point === "miss") {
       // alert the user that they have alreay clicked here. Helps user experience and makes sure nothing
       // happens when the user clicks a point they already have

@@ -1,11 +1,11 @@
 import React from "react";
 import "./Message.css";
 
-function Message() {
+function Message({ message }) {
   return (
     <>
       <div className="message">
-        <h3>I am a message</h3>
+        <h3>{message}</h3>
       </div>
     </>
   );
