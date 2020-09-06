@@ -2,10 +2,13 @@ import React from "react";
 import "./Message.css";
 
 function Message({ message }) {
+  let messageList = message.map((m) => {
+    return <li>{m}</li>;
+  });
   return (
     <>
       <div className="message">
-        <h3>{message}</h3>
+        <ul>{messageList}</ul>
       </div>
     </>
   );

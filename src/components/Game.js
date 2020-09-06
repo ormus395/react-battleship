@@ -35,24 +35,25 @@ const initailState = {
 function Game() {
   // set initial state
   let [gameState, setGameState] = React.useState(initailState);
-  let [message, setMessage] = React.useState(
-    "Welcome! Try sinking the computers ships! Click a grid to start."
-  );
+  let [message, setMessage] = React.useState([
+    "Welcome! Try sinking the computers ships! Click a grid to start.",
+  ]);
   let [messageChanged, setMessageChanged] = React.useState(false);
 
   function reducer(action) {
-    console.log("Reducer called");
-    console.log(action);
+    let newMessage = [...message];
     switch (action.type) {
       case DESTROYED_SHIP:
-        setMessage("A ship was destroyed!");
+        newMessage.push("A ship was destroyed!");
+        setMessage(newMessage);
         setMessageChanged(true);
         return setGameState({
           ...gameState,
           shipCount: gameState.shipCount - 1,
         });
       case MISSED:
-        setMessage("You missed!");
+        newMessage.push("You missed!");
+        setMessage(newMessage);
         setMessageChanged(true);
         let newState = {
           ...gameState,
@@ -60,14 +61,16 @@ function Game() {
         };
         return setGameState(newState);
       case LOST:
-        setMessage("You lost...");
+        newMessage.push("You lost...");
+        setMessage(newMessage);
         setMessageChanged(true);
         return setGameState({
           ...gameState,
           isLose: true,
         });
       case WON:
-        setMessage("You Won!");
+        newMessage.push("You Won!");
+        setMessage(newMessage);
         setMessageChanged(true);
         return setGameState({ ...gameState, isWin: true });
       default:
@@ -76,10 +79,11 @@ function Game() {
   }
 
   React.useEffect(() => {
-    console.log("Use effect called");
+    let newMessage = [...message];
+    newMessage.pop();
     if (messageChanged) {
       setTimeout(() => {
-        setMessage("");
+        setMessage(newMessage);
         setMessageChanged(false);
       }, 1500);
     }
@@ -107,6 +111,7 @@ function Game() {
       <Sea
         handleMiss={handleMiss}
         handleDestroyed={handleDestroyed}
+        message={message}
         updateMessage={{
           setMessage: setMessage,
           setMessageChanged: setMessageChanged,

@@ -16,6 +16,7 @@ import Ship from "./Ship";
 
 // will take rows and cols and ship count
 function Sea({
+  message,
   handleMiss,
   handleDestroyed,
   updateMessage,
@@ -122,10 +123,13 @@ function Sea({
 
       if (ship.hitCount === 0) {
         handleDestroyed({ type: DESTROYED_SHIP });
+      } else {
+        let newMessage = [...message];
+        newMessage.push("You hit a ship!");
+        updateMessage.setMessage(newMessage);
+        updateMessage.setMessageChanged(true);
       }
       setSea(updatedSea);
-      updateMessage.setMessage("You hit a ship!");
-      updateMessage.setMessageChanged(true);
     } else if (point === "hit" || point === "miss") {
       // alert the user that they have alreay clicked here. Helps user experience and makes sure nothing
       // happens when the user clicks a point they already have
